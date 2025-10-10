@@ -11,4 +11,5 @@ It verifies login functionality and the Products page on [SauceDemo](https://www
 
 ### ▶️ Run Tests
 ```bash
-npx playwright test
+npx playwright test 
+
