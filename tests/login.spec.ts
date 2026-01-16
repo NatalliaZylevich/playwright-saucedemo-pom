@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../page-objects/loginPage';
 
-test('Successful login with valid credentials', async ({ page }) => {
+test('Successful login with valid data', async ({ page }) => {
   // Создаём объект логин-страницы
   const loginPage = new LoginPage(page);
 
@@ -16,7 +16,7 @@ test('Successful login with valid credentials', async ({ page }) => {
 });
 
 
-test('Login fails with invalid credentials', async ({ page }) => {
+test('Login fails with invalid data', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.goto();
@@ -25,4 +25,15 @@ test('Login fails with invalid credentials', async ({ page }) => {
   const errorMessage = page.locator('[data-test="error"]');
   await expect(errorMessage).toBeVisible();
   await expect(errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
+});
+
+test('Login fails for locked out user', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+  await loginPage.login('locked_out_user', 'secret_sauce');
+
+  const errorMessage = page.locator('[data-test="error"]');
+  await expect(errorMessage).toBeVisible();
+  await expect(errorMessage).toHaveText('Epic sadface: Sorry, this user has been locked out.');
 });
